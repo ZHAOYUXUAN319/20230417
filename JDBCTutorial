@@ -1,0 +1,55 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+/**
+ *
+ * @author hangt
+ */
+public class JDBCTutorial {
+
+    public static void main(String[] args) {
+        Connection connection = null;
+        try {
+            connection = DriverManager
+                    .getConnection(
+                            "jdbc:postgresql://localhost:5434/postgres",
+                            "postgres", "319333633");
+
+            //データ操作開始
+            Statement statement = connection.createStatement(); // クエリを作成( 1. にて作成したコネクションからstatementを作成）
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM countries");
+
+            System.out.println("データ読み取り開始");
+            while (resultSet.next()) {
+                // Object
+                Integer id = resultSet.getInt("id");
+                Object obj = resultSet.getObject("name");
+                //Object obj1 = resultSet.get1bject("ranking");// Not null / null
+                System.out.println(id + "/ " + obj );
+            }
+            resultSet.close();
+
+            System.out.println("データ読み取り終了");
+
+            //データ操作終了
+            connection.close();
+
+            System.out.println("Opened database successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}
+
+
